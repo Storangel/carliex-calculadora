@@ -1,17 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
-import PDFDocument from 'pdfkit'
 import { calculateQuote } from '@/lib/calc-engine'
 
-export const runtime = 'nodejs' // pdfkit necesita Node, no Edge
+export const runtime = 'nodejs' // pdfkit requiere Node.js runtime
 
 export async function POST(req: NextRequest) {
-  const body = await req.json()
+  // Import dinámico evita problemas CJS/ESM en Turbopack
+  const PDFDocument = (await import('pdfkit')).default
+
+  const body = await req.json() as {
+    cif: number
+    freight?: number
+    insurance?: number
+    hsCode: string
+    originCountry: string
+  }
 
   const result = calculateQuote(
     {
       cif: Number(body.cif),
-      freight: Number(body.freight),
-      insurance: Number(body.insurance),
+      freight: Number(body.freight ?? 0),
+      insurance: Number(body.insurance ?? 0),
       hsCode: body.hsCode,
       originCountry: body.originCountry,
     },
@@ -27,19 +35,17 @@ export async function POST(req: NextRequest) {
     }
   )
 
-  // Crear PDF en memoria
   const doc = new PDFDocument({ margin: 40 })
   const chunks: Buffer[] = []
-
-  doc.on('data', (c) => chunks.push(c))
+  doc.on('data', (c: Buffer) => chunks.push(c))
   doc.on('end', () => {})
 
   doc.fontSize(18).fillColor('#d4af37').text('Presupuesto Carliex Europe', { align: 'center' })
   doc.moveDown()
   doc.fontSize(12).fillColor('#ffffff')
-  doc.text(`CIF: €${body.cif}`)
-  doc.text(`Flete: €${body.freight}`)
-  doc.text(`Seguro: €${body.insurance}`)
+  doc.text(`CIF: €${Number(body.cif).toFixed(2)}`)
+  doc.text(`Flete: €${Number(body.freight ?? 0).toFixed(2)}`)
+  doc.text(`Seguro: €${Number(body.insurance ?? 0).toFixed(2)}`)
   doc.text(`HS Code: ${body.hsCode}`)
   doc.moveDown()
   doc.text(`Base: €${result.baseImport.toFixed(2)}`)
