@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Estilos globales Carliex ===== */
+/* ===== Estilos globales Carliex (sin @apply) ===== */
 :root {
   --carbon: #0b0b0c;
   --gold: #d4af37;
@@ -10,36 +10,37 @@
   --white: #fafafa;
 }
 
+/* Fondo y tipografía base */
 html, body {
-  @apply bg-[color:var(--carbon)] text-[color:var(--white)] antialiased;
-}
-
-/* Clases personalizadas */
-.bg-carbon {
   background-color: var(--carbon);
+  color: var(--white);
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.text-gold {
-  color: var(--gold);
-}
-
-.border-gold\/20 {
-  border-color: rgba(212, 175, 55, 0.2);
-}
-
-.border-gold\/30 {
-  border-color: rgba(212, 175, 55, 0.3);
-}
-
-.border-gold\/60 {
-  border-color: rgba(212, 175, 55, 0.6);
-}
-
-.shadow-gold {
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-}
-
-/* Container adaptado */
+/* Contenedor central (equiv. a max-w-3xl + px-4 md:px-6) */
 .container-app {
-  @apply max-w-3xl mx-auto px-4;
+  max-width: 48rem;         /* 3xl ≈ 48rem */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;       /* 16px */
+  padding-right: 1rem;
 }
+@media (min-width: 768px) {
+  .container-app {
+    padding-left: 1.5rem;   /* 24px */
+    padding-right: 1.5rem;
+  }
+}
+
+/* Utilidades simples */
+.text-gold { color: var(--gold); }
+.border-gold-20 { border-color: rgba(212, 175, 55, 0.20); }
+.border-gold-30 { border-color: rgba(212, 175, 55, 0.30); }
+.border-gold-60 { border-color: rgba(212, 175, 55, 0.60); }
+.shadow-gold { box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+
+/* Enlaces en dorado */
+a { color: var(--gold); }
+a:hover { opacity: 0.9; }
