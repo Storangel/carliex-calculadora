@@ -1,10 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  experimental: {
-    // Evita que el bundler intente empaquetar pdfkit/fontkit
-    serverComponentsExternalPackages: ['pdfkit', 'fontkit'],
-  },
+  // Evita que Next intente empaquetar estos CJS (pdfkit/fontkit)
+  serverExternalPackages: ['pdfkit', 'fontkit'],
 }
 
 export default nextConfig
