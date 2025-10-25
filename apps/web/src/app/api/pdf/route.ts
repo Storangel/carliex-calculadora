@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server'
 import { calculateQuote } from '@/lib/calc-engine'
 
-export const runtime = 'nodejs' // pdfkit requiere Node.js runtime
+export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
-    // Import dinámico y compatible (CJS/ESM)
+    // Import dinámico compatible CJS/ESM
     const mod = await import('pdfkit')
     const PDFDocument: any = (mod as any).default ?? (mod as any)
 
@@ -37,12 +38,11 @@ export async function POST(req: NextRequest) {
       }
     )
 
-    // Crear PDF en memoria y ESPERAR a que termine
     const doc = new PDFDocument({ margin: 40 })
     const chunks: Buffer[] = []
-
     doc.on('data', (c: Buffer) => chunks.push(c))
 
+    // —— Contenido del PDF ——
     doc.fontSize(18).fillColor('#d4af37').text('Presupuesto Carliex Europe', { align: 'center' })
     doc.moveDown()
     doc.fontSize(12).fillColor('#ffffff')
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
     doc.moveDown()
     doc.fillColor('#d4af37').fontSize(14).text(`TOTAL: €${result.total.toFixed(2)}`)
 
-    // Cerrar el doc y esperar a 'end'
+    // Esperar a que termine de generarse
     const pdfBuffer: Buffer = await new Promise((resolve, reject) => {
       doc.on('end', () => resolve(Buffer.concat(chunks)))
       doc.on('error', reject)
