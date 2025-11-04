@@ -19,7 +19,7 @@ export default function CalculadoraPage() {
     freight: '',
     insurance: '',
     hsCode: '8703',
-    originCountry: 'AE', // Dubái/EAU por defecto
+    originCountry: 'AE',
   })
   const [result, setResult] = useState<Result | null>(null)
   const [loading, setLoading] = useState(false)
@@ -31,29 +31,19 @@ export default function CalculadoraPage() {
       setForm((s) => ({ ...s, [field]: e.target.value }))
     }
 
-  // Cálculo local (mismos parámetros del PDF)
   const onCalc = () => {
     setError(null)
     const cif = Number(form.cif || 0)
-    const freight = Number(form.freight || 0)
-    const insurance = Number(form.insurance || 0)
 
     // MVP: reglas fijas
-    const baseImport = cif // base sobre CIF
+    const baseImport = cif
     const arancel = baseImport * 0.10 // 10%
-    const dua = 60 // €
-    const logistics = 300 // €
-    // IVA 21% sobre (base + arancel + DUA + logística)
+    const dua = 60
+    const logistics = 300
     const iva = (baseImport + arancel + dua + logistics) * 0.21
     const total = baseImport + arancel + dua + logistics + iva
 
-    setResult({
-      baseImport,
-      arancel,
-      dua,
-      logistics,
-      total,
-    })
+    setResult({ baseImport, arancel, dua, logistics, total })
   }
 
   const onExportPdf = async () => {
@@ -73,7 +63,6 @@ export default function CalculadoraPage() {
 
       const ct = res.headers.get('content-type') || ''
       if (!res.ok || !ct.startsWith('application/pdf')) {
-        // Si el server devolvió JSON de error, muéstralo
         try {
           const j = await res.json()
           setError(j?.error ?? `Error al generar PDF (HTTP ${res.status})`)
@@ -86,7 +75,7 @@ export default function CalculadoraPage() {
       const blob = await res.blob()
       const url = URL.createObjectURL(blob)
       window.open(url, '_blank')
-    } catch (e) {
+    } catch {
       setError('No se pudo conectar con el servicio de PDF.')
     }
   }
@@ -95,9 +84,7 @@ export default function CalculadoraPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl text-gold font-semibold">Calculadora de Subastas</h1>
-        <p className="text-sm text-white/70">
-          Estimación rápida de costes para importación desde Dubái.
-        </p>
+        <p className="text-sm text-white/70">Estimación rápida de costes para importación desde Dubái.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -162,9 +149,7 @@ export default function CalculadoraPage() {
             <li>Arancel: € {result.arancel.toFixed(2)}</li>
             <li>DUA: € {result.dua.toFixed(2)}</li>
             <li>Logística: € {result.logistics.toFixed(2)}</li>
-            <li className="text-gold font-semibold pt-1">
-              TOTAL: € {result.total.toFixed(2)}
-            </li>
+            <li className="text-gold font-semibold pt-1">TOTAL: € {result.total.toFixed(2)}</li>
           </ul>
         </div>
       )}
