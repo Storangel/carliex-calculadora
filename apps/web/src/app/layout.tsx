@@ -1,19 +1,14 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import Header from '@/components/Header'
-
-export const metadata: Metadata = {
-  title: 'Carliex Calculadora',
-  description: 'Calculadora de subastas y costes de importación | Carliex Europe',
-}
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function Home() {
   return (
-    <html lang="es">
-      <body style={{ backgroundColor: 'var(--carbon)', color: 'var(--white)' }}>
-        <Header />
-        <main className="container-app py-8">{children}</main>
-      </body>
-    </html>
+    <div className="space-y-3">
+      <h1 className="text-2xl text-gold font-semibold">Calculadora de Subastas</h1>
+      <p>Herramienta de estimación de costes para importadores y concesionarios.</p>
+      <a
+        href="/calculadora"
+        className="inline-block px-4 py-2 rounded border border-gold-30 text-gold hover:opacity-90"
+      >
+        Ir a la calculadora
+      </a>
+    </div>
   )
 }
