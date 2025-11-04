@@ -4,8 +4,9 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 const config: Config = {
   darkMode: 'class',
   content: [
-    './src/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}', // shadcn/ui generó aquí
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',       // ✅ páginas y layouts
+    './src/components/**/*.{js,ts,jsx,tsx}',    // ✅ componentes
+    './src/lib/**/*.{js,ts,jsx,tsx}',           // opcional utilidades
   ],
   theme: {
     extend: {
@@ -26,7 +27,6 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // ejemplo: añade tu var de Montserrat junto a la sans por defecto
         montserrat: ['var(--font-montserrat)', ...defaultTheme.fontFamily.sans],
       },
       boxShadow: {
@@ -44,4 +44,3 @@ const config: Config = {
 }
 
 export default config
-
