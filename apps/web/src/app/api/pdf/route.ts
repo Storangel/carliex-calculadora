@@ -57,15 +57,18 @@ export async function POST(req: NextRequest) {
     doc.moveDown()
     doc.fillColor('#d4af37').fontSize(14).text(`TOTAL: €${result.total.toFixed(2)}`)
 
-    // Esperar 'end' y devolver con API Web Response
+    // Esperar a que termine y convertir a ArrayBuffer (BodyInit válido)
     const pdfBuffer: Buffer = await new Promise((resolve, reject) => {
       doc.on('end', () => resolve(Buffer.concat(chunks)))
       doc.on('error', reject)
       doc.end()
     })
+    const arrayBuffer = pdfBuffer.buffer.slice(
+      pdfBuffer.byteOffset,
+      pdfBuffer.byteOffset + pdfBuffer.byteLength
+    )
 
-    // Response (no NextResponse) para evitar el error de tipos
-    return new Response(pdfBuffer, {
+    return new Response(arrayBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'inline; filename="presupuesto.pdf"',
