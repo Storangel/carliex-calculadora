@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Estilos globales Carliex (sin @apply) ===== */
+/* ===== Estilos globales Carliex ===== */
 :root {
   --carbon: #0b0b0c;
   --gold: #d4af37;
@@ -10,7 +10,6 @@
   --white: #fafafa;
 }
 
-/* Fondo y tipografía base */
 html, body {
   background-color: var(--carbon);
   color: var(--white);
@@ -19,28 +18,28 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Contenedor central (equiv. a max-w-3xl + px-4 md:px-6) */
+/* Contenedor central */
 .container-app {
-  max-width: 48rem;         /* 3xl ≈ 48rem */
+  max-width: 48rem;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;       /* 16px */
+  padding-left: 1rem;
   padding-right: 1rem;
 }
 @media (min-width: 768px) {
   .container-app {
-    padding-left: 1.5rem;   /* 24px */
+    padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
 }
 
-/* Utilidades simples */
+/* Utilidades */
 .text-gold { color: var(--gold); }
+.bg-gold { background-color: var(--gold); }
 .border-gold-20 { border-color: rgba(212, 175, 55, 0.20); }
 .border-gold-30 { border-color: rgba(212, 175, 55, 0.30); }
 .border-gold-60 { border-color: rgba(212, 175, 55, 0.60); }
 .shadow-gold { box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
 
-/* Enlaces en dorado */
 a { color: var(--gold); }
 a:hover { opacity: 0.9; }
